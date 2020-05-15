@@ -3,11 +3,12 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import unittest
 
+from alfa import Navigate
 
 class AddToCart(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()
-        self.driver.implicitly_wait(30)
+        self.driver.implicitly_wait(5)
         self.base_url = "https://www.google.com/"
         self.verificationErrors = []
         self.accept_next_alert = True
@@ -15,13 +16,19 @@ class AddToCart(unittest.TestCase):
     def test_add_to_cart(self):
         driver = self.driver
         driver.get("https://www.alfa.cz/")
-        driver.find_element_by_link_text(u"Pevné disky a SSD").click()
-        driver.find_element_by_name("SortOrder").click()
-        driver.find_element_by_xpath("//option[@value='4']").click()
-        driver.find_element_by_xpath(u"//img[@alt='Seřadí položky sestupně (Z-A, 10-1)']").click()
-        driver.find_element_by_xpath("//input[@name='buy']").click()
-        driver.find_element_by_xpath("(//input[@name='buy'])[2]").click()
-        driver.find_element_by_xpath("//td[@id='topbasket']/a/img").click()
+
+        navigate = Navigate(driver)
+
+        navigate.category(u"Pevné disky a SSD")
+        navigate.sort_list("price")
+
+        navigate.buy(1)
+        navigate.buy(2)
+
+        navigate.basket()
+
+        navigate.check_basket_item(1)
+        navigate.check_basket_item(2)
 
     def is_element_present(self, how, what):
         try:
