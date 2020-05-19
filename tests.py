@@ -4,6 +4,7 @@ from selenium.common.exceptions import NoAlertPresentException
 import unittest
 
 from alfa import Navigate
+from alfa_lib import *
 
 class AddToCart(unittest.TestCase):
     def setUp(self):
@@ -15,20 +16,17 @@ class AddToCart(unittest.TestCase):
 
     def test_add_to_cart(self):
         driver = self.driver
-        driver.get("https://www.alfa.cz/")
+        driver.get(front_page)
+        driver.find_element_by_xpath(subcat_hdd_ssd).click()
 
         navigate = Navigate(driver)
 
-        navigate.category(u"Pevné disky a SSD")
-        navigate.sort_list("price")
+        navigate.sort_list(sort_option_price)
 
         navigate.buy(1)
         navigate.buy(2)
 
-        navigate.basket()
-
-        navigate.check_basket_item(1)
-        navigate.check_basket_item(2)
+        navigate.check_basket_item("2 ks")
 
     def is_element_present(self, how, what):
         try:
